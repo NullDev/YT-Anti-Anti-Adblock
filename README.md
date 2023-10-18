@@ -1,6 +1,6 @@
 # YT Anti-Anti-Adblock
 
-<p align="center"><a href="https://github.com/NullDev/YT-Anti-Anti-Adblock/raw/master/yt-anti-anti-adblock.user.js"><img height="200" width="auto" src="/icon.png" /></a></p>
+<p align="center"><a href="https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js"><img height="200" width="auto" src="/icon.png" /></a></p>
 <p align="center"><b>Simplistic user-script to remove YouTube's "Adblockers are not allowed" popup.</b></p>
 <hr>
 
@@ -35,7 +35,7 @@ Hence: ✨ Youtube Anti-Anti-Adblock ✨
 2. **Install the script**: <br><br>
 [![Click to install](https://img.shields.io/badge/Click%20to%20install-37a779?style=for-the-badge)](https://github.com/NullDev/YT-Anti-Anti-Adblock/raw/master/yt-anti-anti-adblock.user.js)
 
-    <sub>If the button doesn't work for some reason: [click here](https://github.com/NullDev/YT-Anti-Anti-Adblock/raw/master/yt-anti-anti-adblock.user.js).</sub>
+    <sub>If the button doesn't work for some reason: [click here](https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js).</sub>
 
 <hr>
 
