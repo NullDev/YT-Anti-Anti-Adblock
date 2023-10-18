@@ -1,4 +1,4 @@
-# YT-Anti-Anti-Adblock
+# YT Anti-Anti-Adblock
 
 <p align="center"><img height="200" width="auto" src="/icon.png" /></p>
 <p align="center"><b>Simplistic user-script to remove YouTube's "Adblockers are not allowed" popup.</b></p>
@@ -7,8 +7,10 @@
 ## :question: What does it do?
 
 It automatically closes the "Ad blockers are not allowed on YouTube" popup and un-pauses the video for you. <br>
-Hopefully even fast enough so that you don't even notice 😸 <br><br>
-**Note:** This is _not_ a replacement for your Ad-Blocker. <br><br>
+Hopefully even fast enough so that you don't even notice 😸
+
+**Note:** This is _not_ a replacement for your Ad-Blocker.
+
 It literally only closes the popup. And unpauses the video. Uh, yea. <br>
 Oh and the script auto updates. Which is neat. I guess.
 
@@ -16,7 +18,9 @@ Oh and the script auto updates. Which is neat. I guess.
 
 ## :question: Why not use xyz?
 
-Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker)
+Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker).
+
+Hence: ✨ Youtube Anti-Anti-Adblock ✨
 
 <hr>
 
