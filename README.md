@@ -9,7 +9,8 @@
 It automatically closes the "Ad blockers are not allowed on YouTube" popup and un-pauses the video for you. <br>
 Hopefully even fast enough so that you don't even notice 😸 <br><br>
 **Note:** This is _not_ a replacement for your Ad-Blocker. <br><br>
-It literally only closes the popup. And unpauses the video. Uh, yea. Oh and the script auto updates. Which is neat. I guess.
+It literally only closes the popup. And unpauses the video. Uh, yea. <br>
+Oh and the script auto updates. Which is neat. I guess.
 
 <hr>
 
