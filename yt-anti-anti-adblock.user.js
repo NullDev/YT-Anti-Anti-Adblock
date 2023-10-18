@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         YouTube Anti-Anti-Adblock
 // @namespace    yt-anti-anti-adblock
-// @version      0.1
+// @version      0.1.0
 // @description  Remove the "ad blockers are not allowed on youtube" popup.
 // @author       NullDev
 // @match        https://www.youtube.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
+// @icon         https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
 // @grant        none
 // ==/UserScript==
 
