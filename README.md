@@ -14,6 +14,12 @@ Oh and the script auto updates. Which is neat. I guess.
 
 <hr>
 
+## :question: Why not use xyz?
+
+Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker)
+
+<hr>
+
 ## :satellite: Installation
 
 1. **Install Tampermonkey for your browser**:
