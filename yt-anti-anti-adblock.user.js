@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Anti-Anti-Adblock
 // @namespace    yt-anti-anti-adblock
-// @version      0.1.1
+// @version      0.1.2
 // @description  Remove the "ad blockers are not allowed on youtube" popup.
 // @author       NullDev
 // @license      MIT
@@ -11,6 +11,7 @@
 // @updateURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @downloadURL  https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @grant        none
+// @run-at       document-start
 // ==/UserScript==
 
 "use strict";
@@ -19,41 +20,52 @@
 // = Copyright (c) NullDev = //
 // ========================= //
 
+window.google_ad_status = 1;
+
 const probeElement = "#header.style-scope.ytd-enforcement-message-view-model";
 const checkInterval = 1000;
 const maxChecks = 30;
 
 /**
+ * Log a yt-anti-anti-adblock message and format it.
+ */
+const log = (msg) => console.log(`%cyt-anti-anti-adblock: %c${msg}`, "color:#66A1FF;font-weight:bold;", "color:#63B06B;font-weight:bold;");
+
+/**
  * Check if the probe element exists.
  *
- * @return {boolean} 
+ * @return {boolean}
  */
-const checkIfElementExists = function(){
-    return !!document.querySelector(probeElement);
+const checkIfElementExists = () => !!document.querySelector(probeElement);
+
+/**
+ * Probe an array of popup parents (depending on which one youtube decides to show).
+ */
+const parentProber = function(probe, parents){
+    for (const parent of parents){
+        const parentProbe = probe.closest(parent);
+        if (parentProbe) parentProbe.remove();
+    }
 };
 
 /**
  * Remove the popup and play the video.
  * We need to get the parent element of the probe element to get the entire popup.
- * 
+ *
  * @returns {void}
  */
 const cleanUp = function(){
     const probe = document.querySelector(probeElement);
     if (!probe) return;
 
-    const parent = probe.closest("ytd-popup-container");
-    if (!parent) return;
+    parentProber(probe, ["ytd-popup-container", "#error-screen"]);
 
-    parent.remove();
+    log("Popup removed.");
 
     const video = document.querySelector("video");
-    if (!video) return;
+    if (video) return video.play();
 
-    video.play();
-
-    console.log("%cyt-anti-anti-adblock: %cBy NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock", "color:#66A1FF;font-weight:bold;", "color:#63B06B;font-weight:bold;");
-    console.log("%cyt-anti-anti-adblock: %cPopup removed.", "color:#66A1FF;font-weight:bold;", "color:#63B06B;font-weight:bold;");
+    log("No video element found. YouTube is doing something fishy.");
 };
 
 /**
@@ -63,6 +75,9 @@ const cleanUp = function(){
  * @returns {void}
  */
 const prober = function(){
+    log("Initialized.");
+    log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
+
     if (checkIfElementExists()){
         cleanUp();
         return;
@@ -71,11 +86,16 @@ const prober = function(){
     let counter = 0;
     const interval = setInterval(() => {
         if (checkIfElementExists()){
+            log("Found the popup! Cleaning up now.");
             cleanUp();
             clearInterval(interval);
             return;
         }
-        else if (counter >= maxChecks) clearInterval(interval);
+        else if (counter >= maxChecks){
+            clearInterval(interval);
+            log(`No popup found after ${maxChecks}s. I'm giving up`);
+            return;
+        }
         else counter++;
     }, checkInterval);
 };
