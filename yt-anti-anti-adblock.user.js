@@ -20,6 +20,7 @@
 // = Copyright (c) NullDev = //
 // ========================= //
 
+// @ts-ignore
 window.google_ad_status = 1;
 
 const probeElement = "#header.style-scope.ytd-enforcement-message-view-model";
@@ -63,7 +64,10 @@ const cleanUp = function(){
     log("Popup removed.");
 
     const video = document.querySelector("video");
-    if (video) return video.play();
+    if (video){
+        video.play();
+        return;
+    }
 
     log("No video element found. YouTube is doing something fishy.");
 };
@@ -96,7 +100,7 @@ const prober = function(){
             log(`No popup found after ${maxChecks}s. I'm giving up`);
             return;
         }
-        else counter++;
+        counter++;
     }, checkInterval);
 };
 
