@@ -5,7 +5,7 @@
 // @description  Remove the "ad blockers are not allowed on youtube" popup.
 // @author       NullDev
 // @license      MIT
-// @match        https://www.youtube.com/*
+// @match        *://*.youtube.com/*
 // @homepageURL  https://github.com/NullDev/YT-Anti-Anti-Adblock
 // @icon         https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
 // @updateURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
@@ -79,10 +79,8 @@ const cleanUp = function(){
  * @returns {void}
  */
 const prober = function(){
-    log("Initialized.");
-    log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
-
     if (checkIfElementExists()){
+        log("Popup is already here! Cleaning up now.");
         cleanUp();
         return;
     }
@@ -104,4 +102,11 @@ const prober = function(){
     }, checkInterval);
 };
 
-(() => prober())();
+(() => {
+    if (!location.pathname.startsWith("/watch")) return;
+
+    log("Initialized.");
+    log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
+
+    prober();
+})();
