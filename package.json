@@ -1,0 +1,22 @@
+{
+  "name": "yt-anti-anti-adblock",
+  "version": "0.1.2",
+  "private": true,
+  "description": "Remove the \"ad blockers are not allowed on youtube\" popup.",
+  "main": "yt-anti-anti-adblock.user.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NullDev/YT-Anti-Anti-Adblock.git"
+  },
+  "author": "NullDev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NullDev/YT-Anti-Anti-Adblock/issues"
+  },
+  "homepage": "https://github.com/NullDev/YT-Anti-Anti-Adblock#readme",
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/eslint-parser": "^7.22.15",
+    "eslint": "^8.51.0"
+  }
+}
