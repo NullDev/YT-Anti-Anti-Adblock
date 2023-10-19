@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report
 title: "[BUG] "
 labels: bug
 assignees: ''
@@ -23,10 +23,10 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Developers only: **
- - OS: [e.g. Ubuntu 22.04]
- - NodeJS Version [e.g. 19.0.2]
- - NPM Version [e.g. 8.19.2]
+**Additional info**
+ - OS: [e.g. Windows 11]
+ - Browser & Version [e.g. Google Chrome	118.0.5993.88]
+ - AdBlockers & Other Extensions: [e.g. AdBlock Plus, uBlock, etc]
 
 **Additional context**
 Add any other context about the problem here.
