@@ -87,11 +87,25 @@ const loadVideo = function(){
 };
 
 /**
+ * Disable auto play to stop funky behaviour.
+ */
+const disableAutoPlay = function(){
+    if (!(new URLSearchParams(window.location.search)).has("list")) return;
+
+    const [ manager ] = document.getElementsByTagName("yt-playlist-manager"); // @ts-ignore
+    manager.canAutoAdvance_ = false; // @ts-ignore
+    manager.autoplayData = null;
+
+    log("Disabled auto play.");
+};
+
+/**
  * Handle navigation to a new page.
  *
  * @return {void}
  */
 const handleNavigation = function(){
+    disableAutoPlay();
     if (!!document.getElementById(playerID)) return;
 
     const f = document.createElement("div");
@@ -172,6 +186,7 @@ const cleanUp = function(){
         log("Cleaned up violation message");
 
         listeners();
+        disableAutoPlay();
         loadVideo();
     }
 };
