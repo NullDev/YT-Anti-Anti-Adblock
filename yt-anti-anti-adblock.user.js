@@ -53,6 +53,18 @@ const done = function(){
 };
 
 /**
+ * Check if the video URL contains a timestamp and seek to it.
+ */
+const checkAndSeekTimestamp = function(){
+    const timestamp = (new URLSearchParams(window.location.search)).get("t");
+    if (timestamp){ // @ts-ignore
+        const [ time, unit ] = timestamp.match(/\d+|\D+/g);
+        const seconds = (unit === "s") ? time : time * 60;
+        window[playerID].seekTo(seconds, true);
+    }
+};
+
+/**
  * Load the YouTube API and create a new player.
  *
  * @return {void}
@@ -78,6 +90,9 @@ const loadVideo = function(){
                     onReady(){
                         document.body.focus();
                         log("Video loaded.");
+
+                        checkAndSeekTimestamp();
+
                         done();
                     },
                 },
