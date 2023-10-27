@@ -13,6 +13,7 @@ Hopefully even fast enough so that you don't even notice 😸
 - It removes the closable "Ad blockers are not allowed on YouTube" popup.
 - It removes the closable three-strikes popup.
 - And it removes the **non-closable** "Ad blockers violate YouTube's Terms of Service".
+- It also supports playlists and timestamps and stuff.
 - Oh and the script auto updates. Which is neat. I guess.
 
 **Note:** This is _not_ a replacement for your Ad-Blocker.
