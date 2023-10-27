@@ -46,12 +46,10 @@ const parentProber = function(probe, parents){
 };
 
 /**
- * Maybe cleanup observer.
- * We have to reattach the observer after every page change though.
+ * Yay
  */
 const done = function(){
     log("All Done :)");
-    // OBSERVER?.disconnect();
 };
 
 /**
@@ -73,7 +71,7 @@ const loadVideo = function(){
 
         !!YT && YT.ready(function(){
             log("YouTube API ready.");
-            window[playerID] = new YT.Player("customPlayer", {
+            window[playerID] = new YT.Player(playerID, {
                 videoId: (new URLSearchParams(window.location.search).get("v") || ""),
                 playerVars: { autoplay: 1, controls: 1, disablekb: 0, enablejsapi: 1 },
                 events: {
@@ -94,10 +92,10 @@ const loadVideo = function(){
  * @return {void}
  */
 const handleNavigation = function(){
-    if (!!document.getElementById("customPlayer")) return;
+    if (!!document.getElementById(playerID)) return;
 
     const f = document.createElement("div");
-    f.setAttribute("id", "customPlayer");
+    f.setAttribute("id", playerID);
     f.className = "video-stream html5-main-video";
     this.document.querySelector("div.yt-playability-error-supported-renderers")?.appendChild(f);
     loadVideo();
@@ -148,7 +146,7 @@ const listeners = function(){
  */
 const cleanUp = function(){
     const f = document.createElement("div");
-    f.setAttribute("id", "customPlayer");
+    f.setAttribute("id", playerID);
     f.className = "video-stream html5-main-video";
 
     const video = document.querySelector("video");
@@ -199,8 +197,8 @@ const prober = function(){
         return;
     }
 
-    const previousCustomPlayer = document.getElementById("customPlayer");
-    if (previousCustomPlayer) previousCustomPlayer.remove();
+    const prevPlayer = document.getElementById(playerID);
+    if (prevPlayer) prevPlayer.remove();
     done();
 };
 
