@@ -60,3 +60,33 @@ Feature request or discovered a bug? Please [open an Issue](https://github.com/N
 The video injection via iframe API is based on [@HPZ07](https://github.com/HPZ07)'s [RemoveAdBlockYoutube](https://github.com/HPZ07/RemoveAdBlockYoutube).
 
 <hr>
+
+## 💻 Development
+
+If you're interested in helping out (thanks!): 
+- Clone the repository: `git clone https://github.com/NullDev/YT-Anti-Anti-Adblock.git`
+- Open it in your favourite IDE
+- Install the dependencies for linting with `npm i`
+- [Link the script in Tampermonkey](https://www.tampermonkey.net/faq.php?locale=en#Q402)
+
+Basically, in your Tampermonkey dashboard you create a new script that looks like this: 
+
+```js
+// ==UserScript==
+// @name         YouTube Anti-Anti-Adblock
+// @namespace    yt-anti-anti-adblock
+// @version      1.0.1
+// @description  Remove the "ad blockers are not allowed on youtube" popup.
+// @author       NullDev
+// @license      MIT
+// @match        *://*.youtube.com/*
+// @homepageURL  https://github.com/NullDev/YT-Anti-Anti-Adblock
+// @grant        none
+// @require      file://C:\Users/XXX/PATH/TO/REPOSITORY/YT-Anti-Anti-Adblock/yt-anti-anti-adblock.user.js
+// ==/UserScript==
+```
+
+Pay attention to the `// @require` line and edit the path accordingly. <br>
+Then you just code in your IDE and Tampermonkey will autoupdate it. 
+
+<hr>
