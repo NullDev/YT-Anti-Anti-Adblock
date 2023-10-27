@@ -11,7 +11,6 @@
 // @updateURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @downloadURL  https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @grant        none
-// @run-at       document-start
 // ==/UserScript==
 
 "use strict";
@@ -23,24 +22,21 @@
 // @ts-ignore
 window.google_ad_status = 1;
 
-const probeElement = "#header.style-scope.ytd-enforcement-message-view-model";
-const checkInterval = 1000;
-const maxChecks = 30;
+const playerID = Math.random().toString(36).substring(7);
+window[playerID] = null;
 
 /**
  * Log a yt-anti-anti-adblock message and format it.
+ *
+ * @param {string} msg
  */
 const log = (msg) => console.log(`%cyt-anti-anti-adblock: %c${msg}`, "color:#66A1FF;font-weight:bold;", "color:#63B06B;font-weight:bold;");
 
 /**
- * Check if the probe element exists.
- *
- * @return {boolean}
- */
-const checkIfElementExists = () => !!document.querySelector(probeElement);
-
-/**
  * Probe an array of popup parents (depending on which one youtube decides to show).
+ *
+ * @param {Element} probe
+ * @param {string[]} parents
  */
 const parentProber = function(probe, parents){
     for (const parent of parents){
@@ -50,56 +46,162 @@ const parentProber = function(probe, parents){
 };
 
 /**
- * Remove the popup and play the video.
- * We need to get the parent element of the probe element to get the entire popup.
- *
- * @returns {void}
+ * Maybe cleanup observer.
+ * We have to reattach the observer after every page change though.
  */
-const cleanUp = function(){
-    const probe = document.querySelector(probeElement);
-    if (!probe) return;
-
-    parentProber(probe, ["ytd-popup-container", "#error-screen"]);
-
-    log("Popup removed.");
-
-    const video = document.querySelector("video");
-    if (video){
-        video.play();
-        return;
-    }
-
-    log("No video element found. YouTube is doing something fishy.");
+const done = function(){
+    log("All Done :)");
+    // OBSERVER?.disconnect();
 };
 
 /**
- * Prober function to check if the probe element exists.
- * We check every second for 30 seconds. If the element exists, we remove the popup and play the video.
+ * Load the YouTube API and create a new player.
  *
- * @returns {void}
+ * @return {void}
+ */
+const loadVideo = function(){
+    log("Loading video...");
+
+    const t = document.createElement("script");
+    t.src = "https://www.youtube.com/iframe_api";
+
+    const firstScr = document.getElementsByTagName("script")[0];
+    firstScr.parentNode?.insertBefore(t, firstScr);
+
+    t.onload = function(){ // @ts-ignore
+        const { YT } = window;
+
+        !!YT && YT.ready(function(){
+            log("YouTube API ready.");
+            window[playerID] = new YT.Player("customPlayer", {
+                videoId: (new URLSearchParams(window.location.search).get("v") || ""),
+                playerVars: { autoplay: 1, controls: 1, disablekb: 0, enablejsapi: 1 },
+                events: {
+                    onReady(){
+                        document.body.focus();
+                        log("Video loaded.");
+                        done();
+                    },
+                },
+            });
+        });
+    };
+};
+
+/**
+ * Handle navigation to a new page.
+ *
+ * @return {void}
+ */
+const handleNavigation = function(){
+    if (!!document.getElementById("customPlayer")) return;
+
+    const f = document.createElement("div");
+    f.setAttribute("id", "customPlayer");
+    f.className = "video-stream html5-main-video";
+    this.document.querySelector("div.yt-playability-error-supported-renderers")?.appendChild(f);
+    loadVideo();
+};
+
+/**
+ * Handle key codes for the video player.
+ *
+ * @param {KeyboardEvent} event
+ */
+const handleKeyCodes = function(event){
+    const { key } = event;
+
+    if (key === " "){
+        if (!(document.activeElement?.id === "search" || document.activeElement?.id === "contenteditable-root")){
+            (window[playerID].getPlayerState() === 1)
+                ? window[playerID].pauseVideo()
+                : window[playerID].playVideo();
+
+            event.preventDefault();
+        }
+    }
+
+    else if (key === "ArrowLeft" || key === "ArrowRight"){
+        const currentTime = window[playerID].getCurrentTime();
+        window[playerID].seekTo(currentTime + (key === "ArrowLeft" ? -5 : 5), true);
+    }
+
+    else if (key === "f"){ // @ts-ignore
+        ((document.fullscreenElement || document.webkitFullscreenElement) !== null)
+            ? document.exitFullscreen()
+            : window[playerID].getIframe().requestFullscreen();
+    }
+};
+
+/**
+ * Initialize the event listener for the video player and for navigation.
+ */
+const listeners = function(){
+    document.addEventListener("keydown", handleKeyCodes);
+    window.addEventListener("popstate", handleNavigation);
+};
+
+/**
+ * Clean up the page and restore the video player.
+ *
+ * @return {void}
+ */
+const cleanUp = function(){
+    const f = document.createElement("div");
+    f.setAttribute("id", "customPlayer");
+    f.className = "video-stream html5-main-video";
+
+    const video = document.querySelector("video");
+    if (video && video.src){
+        // old non-strike popup
+        const type0 = document.querySelector("#header.style-scope.ytd-enforcement-message-view-model");
+        if (type0) parentProber(type0, ["ytd-popup-container", "#error-screen"]);
+
+        log("Cleaned up popup. Found the video element. Starting video...");
+        video.play();
+
+        done();
+        return;
+    }
+
+    const type1 = document.querySelector("tp-yt-paper-dialog");
+    if (type1){
+        type1.remove();
+
+        const mainPlayer = /** @type {HTMLVideoElement} */ (document.querySelector("video.video-stream"));
+        if (mainPlayer) mainPlayer.play();
+
+        log("Cleaned up popup");
+    }
+
+    const type2 = document.querySelector("ytd-enforcement-message-view-model.style-scope");
+    if (type2){
+        type2.replaceWith(f);
+
+        const hotkeyManager = document.querySelector("yt-hotkey-manager");
+        if (hotkeyManager) hotkeyManager.remove();
+
+        log("Cleaned up violation message");
+
+        listeners();
+        loadVideo();
+    }
+};
+
+/**
+ * Callback for the page change observer.
+ *
+ * @return {void}
  */
 const prober = function(){
-    if (checkIfElementExists()){
-        log("Popup is already here! Cleaning up now.");
+    if (window.location.pathname === "/watch"){
         cleanUp();
         return;
     }
 
-    let counter = 0;
-    const interval = setInterval(() => {
-        if (checkIfElementExists()){
-            log("Found the popup! Cleaning up now.");
-            cleanUp();
-            clearInterval(interval);
-            return;
-        }
-        else if (counter >= maxChecks){
-            clearInterval(interval);
-            log(`No popup found after ${maxChecks}s. I'm giving up`);
-            return;
-        }
-        counter++;
-    }, checkInterval);
+    const previousCustomPlayer = document.getElementById("customPlayer");
+    if (previousCustomPlayer) previousCustomPlayer.remove();
+    done();
 };
 
 (() => {
@@ -107,6 +209,9 @@ const prober = function(){
 
     log("Initialized.");
     log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
+
+    const observer = new MutationObserver(prober);
+    observer.observe(document.body, { childList: true, subtree: true });
 
     prober();
 })();
