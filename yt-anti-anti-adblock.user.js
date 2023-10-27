@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Anti-Anti-Adblock
 // @namespace    yt-anti-anti-adblock
-// @version      1.0.0
+// @version      1.0.1
 // @description  Remove the "ad blockers are not allowed on youtube" popup.
 // @author       NullDev
 // @license      MIT
@@ -152,24 +152,14 @@ const cleanUp = function(){
     const video = document.querySelector("video");
     if (video && video.src){
         // old non-strike popup
-        const type0 = document.querySelector("#header.style-scope.ytd-enforcement-message-view-model");
-        if (type0) parentProber(type0, ["ytd-popup-container", "#error-screen"]);
+        const type1 = document.querySelector("#header.style-scope.ytd-enforcement-message-view-model");
+        if (type1) parentProber(type1, ["ytd-popup-container", "#error-screen"]);
 
         log("Cleaned up popup. Found the video element. Starting video...");
         video.play();
 
         done();
         return;
-    }
-
-    const type1 = document.querySelector("tp-yt-paper-dialog");
-    if (type1){
-        type1.remove();
-
-        const mainPlayer = /** @type {HTMLVideoElement} */ (document.querySelector("video.video-stream"));
-        if (mainPlayer) mainPlayer.play();
-
-        log("Cleaned up popup");
     }
 
     const type2 = document.querySelector("ytd-enforcement-message-view-model.style-scope");
