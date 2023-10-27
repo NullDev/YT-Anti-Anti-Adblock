@@ -6,19 +6,21 @@
 
 ## :question: What does it do?
 
-It automatically closes the "Ad blockers are not allowed on YouTube" popup and un-pauses the video for you. <br>
+It automatically closes the anti-adblock popups and un-pauses (or loads) the video for you. <br>
 Hopefully even fast enough so that you don't even notice 😸
 
-**Note:** This is _not_ a replacement for your Ad-Blocker.
+- It removes the closable "Ad blockers are not allowed on YouTube" popup.
+- It removes the closable three-strikes popup.
+- And it removes the **non-closable** "Ad blockers violate YouTube's Terms of Service".
+- Oh and the script auto updates. Which is neat. I guess.
 
-It literally only closes the popup. And unpauses the video. Uh, yea. <br>
-Oh and the script auto updates. Which is neat. I guess.
+**Note:** This is _not_ a replacement for your Ad-Blocker.
 
 <hr>
 
 ## :question: Why not use xyz?
 
-Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker).
+Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker) or they only killed one type of popup.
 
 Hence: ✨ Youtube Anti-Anti-Adblock ✨
 
