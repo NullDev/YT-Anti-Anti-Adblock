@@ -87,6 +87,7 @@ Basically, in your Tampermonkey dashboard you create a new script that looks lik
 ```
 
 Pay attention to the `// @require` line and edit the path accordingly. <br>
-Then you just code in your IDE and Tampermonkey will autoupdate it. 
+Then make sure the Tampermonkey extension [has permissions for file paths](https://www.tampermonkey.net/faq.php?locale=en#Q204). <br>
+And finally, just code in your IDE and Tampermonkey will autoupdate it. 
 
 <hr>
