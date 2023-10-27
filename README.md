@@ -31,7 +31,7 @@ Hence: ✨ Youtube Anti-Anti-Adblock ✨
 
 1. **Install Tampermonkey for your browser**:
    - [Tampermonkey for Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-   - [Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
+   - [Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) of [Greasemonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
    - [Tampermonkey for Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd)
    - [Tampermonkey for Opera/OperaGX](https://addons.opera.com/en-gb/extensions/details/tampermonkey-beta/)
 
@@ -93,6 +93,6 @@ Pay attention to the `// @require` line and edit the path accordingly.
 Then make sure the Tampermonkey extension [has permissions for file paths](https://www.tampermonkey.net/faq.php?locale=en#Q204). <br>
 And finally, just code in your IDE and Tampermonkey will autoupdate it. 
 
-Now all thats left to do is grab an [open issue](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues) and start coding 😸
+Now all thats left to do is grab an [open issue](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues) and start coding. 😸
 
 <hr>
