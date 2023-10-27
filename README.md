@@ -1,4 +1,5 @@
 # YT Anti-Anti-Adblock
+[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-brightgreen.svg)](https://www.tampermonkey.net) [![Greasemonkey](https://img.shields.io/badge/Greasemonkey-Compatible-brightgreen.svg)](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
 
 <p align="center"><a href="https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js"><img height="200" width="auto" src="/icon.png" /></a></p>
 <p align="center"><b>Simplistic user-script to remove YouTube's "Adblockers are not allowed" popup.</b></p>
