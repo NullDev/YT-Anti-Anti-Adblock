@@ -46,3 +46,16 @@ Hence: ✨ Youtube Anti-Anti-Adblock ✨
 Feature request or discovered a bug? Please [open an Issue](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues/new/choose) here on GitHub.
 
 <hr>
+
+## :octocat: Contributors
+
+<a href="https://github.com/NullDev/YT-Anti-Anti-Adblock/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=NullDev/YT-Anti-Anti-Adblock" />
+</a>
+
+<sub>Made with [contrib.rocks](https://contrib.rocks).</sub>
+
+**Additional credits:** <br>
+The video injection via iframe API is based on [@HPZ07](https://github.com/HPZ07)'s [RemoveAdBlockYoutube](https://github.com/HPZ07/RemoveAdBlockYoutube).
+
+<hr>
