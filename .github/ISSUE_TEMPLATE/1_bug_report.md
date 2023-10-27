@@ -25,7 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional info**
  - OS: [e.g. Windows 11]
- - Browser & Version [e.g. Google Chrome	118.0.5993.88]
+ - Browser & Version [e.g. Google Chrome 118.0.5993.88]
  - AdBlockers & Other Extensions: [e.g. AdBlock Plus, uBlock, etc]
 
 **Additional context**
