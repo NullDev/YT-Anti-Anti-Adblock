@@ -43,6 +43,8 @@ Hence: ✨ Youtube Anti-Anti-Adblock ✨
 
     <sub>If the button doesn't work for some reason: [click here](https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js).</sub>
 
+### You can also find the script on [Greasy Fork](https://greasyfork.org/en/scripts/478457-youtube-anti-anti-adblock)!
+
 <hr>
 
 ## :diamond_shape_with_a_dot_inside: Feature requests & Issues
