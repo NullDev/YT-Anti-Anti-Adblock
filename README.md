@@ -78,19 +78,21 @@ Basically, in your Tampermonkey dashboard you create a new script that looks lik
 // ==UserScript==
 // @name         YouTube Anti-Anti-Adblock
 // @namespace    yt-anti-anti-adblock
-// @version      1.0.1
+// @version      1.1.0
 // @description  Remove the "ad blockers are not allowed on youtube" popup.
 // @author       NullDev
 // @license      MIT
 // @match        *://*.youtube.com/*
 // @homepageURL  https://github.com/NullDev/YT-Anti-Anti-Adblock
+// @icon         https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
 // @grant        none
-// @require      file://C:\Users/XXX/PATH/TO/REPOSITORY/YT-Anti-Anti-Adblock/yt-anti-anti-adblock.user.js
+// @run-at       document-idle
+// @require      file://C:/Users/XXX/PATH/TO/REPOSITORY/YT-Anti-Anti-Adblock/yt-anti-anti-adblock.user.js
 // ==/UserScript==
 ```
 
 Pay attention to the `// @require` line and edit the path accordingly.
-- Windows: `file://C:\...\...` 
+- Windows: `file://C:/.../...` 
 - Linux: `file:///.../...`)
 
 Then make sure the Tampermonkey extension [has permissions for file paths](https://www.tampermonkey.net/faq.php?locale=en#Q204). <br>
