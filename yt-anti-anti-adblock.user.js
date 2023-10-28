@@ -11,6 +11,7 @@
 // @updateURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @downloadURL  https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @grant        none
+// @run-at       document-idle
 // ==/UserScript==
 
 "use strict";
@@ -43,13 +44,6 @@ const parentProber = function(probe, parents){
         const parentProbe = probe.closest(parent);
         if (parentProbe) parentProbe.remove();
     }
-};
-
-/**
- * Yay
- */
-const done = function(){
-    log("All Done :)");
 };
 
 /**
@@ -92,8 +86,6 @@ const loadVideo = function(){
                         log("Video loaded.");
 
                         checkAndSeekTimestamp();
-
-                        done();
                     },
                 },
             });
@@ -120,6 +112,8 @@ const disableAutoPlay = function(){
  * @return {void}
  */
 const handleNavigation = function(){
+    if (window.location.pathname !== "/watch") return;
+
     disableAutoPlay();
     if (!!document.getElementById(playerID)) return;
 
@@ -127,7 +121,9 @@ const handleNavigation = function(){
     f.setAttribute("id", playerID);
     f.className = "video-stream html5-main-video";
     this.document.querySelector("div.yt-playability-error-supported-renderers")?.appendChild(f);
-    loadVideo();
+
+    // eslint-disable-next-line no-use-before-define
+    cleanUp();
 };
 
 /**
@@ -170,10 +166,13 @@ const listeners = function(){
 
 /**
  * Clean up the page and restore the video player.
+ * Needs to be hoisted.
  *
  * @return {void}
  */
-const cleanUp = function(){
+function cleanUp(){
+    if (window.location.pathname !== "/watch") return;
+
     const f = document.createElement("div");
     f.setAttribute("id", playerID);
     f.className = "video-stream html5-main-video";
@@ -182,12 +181,13 @@ const cleanUp = function(){
     if (video && video.src){
         // old non-strike popup
         const type1 = document.querySelector("#header.style-scope.ytd-enforcement-message-view-model");
-        if (type1) parentProber(type1, ["ytd-popup-container", "#error-screen"]);
+        if (!type1) return;
+
+        parentProber(type1, ["ytd-popup-container", "#error-screen"]);
 
         log("Cleaned up popup. Found the video element. Starting video...");
         video.play();
 
-        done();
         return;
     }
 
@@ -204,7 +204,7 @@ const cleanUp = function(){
         disableAutoPlay();
         loadVideo();
     }
-};
+}
 
 /**
  * Callback for the page change observer.
@@ -219,17 +219,26 @@ const prober = function(){
 
     const prevPlayer = document.getElementById(playerID);
     if (prevPlayer) prevPlayer.remove();
-    done();
 };
 
 (() => {
-    if (!location.pathname.startsWith("/watch")) return;
-
     log("Initialized.");
     log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
 
     const observer = new MutationObserver(prober);
     observer.observe(document.body, { childList: true, subtree: true });
 
-    prober();
+    const {pushState} = history;
+    const {replaceState} = history;
+    history.pushState = function(){
+        pushState.apply(history, arguments);
+        handleNavigation();
+    };
+
+    history.replaceState = function(){
+        replaceState.apply(history, arguments);
+        handleNavigation();
+    };
+
+    window.addEventListener("load", prober);
 })();
