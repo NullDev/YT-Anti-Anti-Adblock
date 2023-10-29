@@ -26,6 +26,19 @@ Hopefully even fast enough so that you don't even notice 😸
 
 <hr>
 
+## ✔️ Compatibility
+
+This script has been tested and is compatible with the following extensions and userscripts: 
+- [AdBlockPlus](https://chrome.google.com/webstore/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb)
+- [uBlock Origin](https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm)
+- [minerBlock](https://chrome.google.com/webstore/detail/minerblock/emikbbbebcdfohonlaifafnoanocnebl)
+- [Return YouTube Dislike](https://chrome.google.com/webstore/detail/return-youtube-dislike/gebbhagfogifgggkldgodflihgfeippi)
+- [Sponsor block for YouTube](https://chrome.google.com/webstore/detail/sponsorblock-for-youtube/mnjggcdmjocbbbhaepdhchncahnbgone)
+- [YouTube Playlist Search](https://inspect.video/playlist-search)
+- ... others will most likely work as well, but have not been tested. Please [report any issue](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues/new/choose) you encounter.
+
+<hr>
+
 ## :question: Why not use xyz?
 
 Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker) or they only killed one type of popup.
