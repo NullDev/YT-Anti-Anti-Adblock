@@ -1,17 +1,19 @@
 // ==UserScript==
-// @name         YouTube Anti-Anti-Adblock
-// @namespace    yt-anti-anti-adblock
-// @version      1.1.1
-// @description  Remove the "ad blockers are not allowed on youtube" popup.
-// @author       NullDev
-// @license      MIT
-// @match        *://*.youtube.com/*
-// @homepageURL  https://github.com/NullDev/YT-Anti-Anti-Adblock
-// @icon         https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
-// @updateURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
-// @downloadURL  https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
-// @grant        none
-// @run-at       document-idle
+// @name           YouTube Anti-Anti-Adblock
+// @name:de        YouTube Anti-Anti-Adblock
+// @namespace      yt-anti-anti-adblock
+// @version        1.1.2
+// @description    Removes the "ad blockers are not allowed on youtube" popup.
+// @description:de Entfernt das "Werbeblocker sind auf YouTube nicht erlaubt" popup.
+// @author         NullDev
+// @license        MIT
+// @match          *://*.youtube.com/*
+// @homepageURL    https://github.com/NullDev/YT-Anti-Anti-Adblock
+// @icon           https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
+// @updateURL      https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
+// @downloadURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
+// @grant          none
+// @run-at         document-idle
 // ==/UserScript==
 
 "use strict";
