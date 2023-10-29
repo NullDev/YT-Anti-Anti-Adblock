@@ -1,8 +1,8 @@
 # YT Anti-Anti-Adblock
 
 [![Greasy Fork](https://img.shields.io/greasyfork/dt/478457)](https://greasyfork.org/en/scripts/478457-youtube-anti-anti-adblock)
-[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-Compatible-brightgreen.svg)](https://www.tampermonkey.net)
-[![Greasemonkey](https://img.shields.io/badge/Greasemonkey-Compatible-brightgreen.svg)](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-✓-brightgreen.svg)](https://www.tampermonkey.net)
+[![Greasemonkey](https://img.shields.io/badge/Greasemonkey-✓-brightgreen.svg)](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
 [![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/NullDev/YT-Anti-Anti-Adblock?logo=Cachet)](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues?q=is%3Aissue+is%3Aclosed)
 [![Version](https://img.shields.io/greasyfork/v/478457?label=Version)](https://greasyfork.org/en/scripts/478457-youtube-anti-anti-adblock/versions)
 [![Greasy Fork Rating](https://img.shields.io/greasyfork/rating-count/478457)](https://greasyfork.org/en/scripts/478457-youtube-anti-anti-adblock/feedback)
