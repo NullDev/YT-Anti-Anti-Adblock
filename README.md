@@ -112,7 +112,7 @@ Basically, in your Tampermonkey dashboard you create a new script that looks lik
 
 Pay attention to the `// @require` line and edit the path accordingly.
 - Windows: `file://C:/.../...` 
-- Linux: `file:///.../...`)
+- Linux: `file:///.../...`
 
 Then make sure the Tampermonkey extension [has permissions for file paths](https://www.tampermonkey.net/faq.php?locale=en#Q204). <br>
 And finally, just code in your IDE and Tampermonkey will autoupdate it. 
