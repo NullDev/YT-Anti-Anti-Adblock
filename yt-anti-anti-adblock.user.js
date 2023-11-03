@@ -2,9 +2,9 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.1.2
-// @description    Removes the "ad blockers are not allowed on youtube" popup.
-// @description:de Entfernt das "Werbeblocker sind auf YouTube nicht erlaubt" popup.
+// @version        1.1.3
+// @description    Removes all the "ad blockers are not allowed on youtube" popups.
+// @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
 // @license        MIT
 // @match          *://*.youtube.com/*
@@ -53,11 +53,12 @@ const parentProber = function(probe, parents){
  */
 const checkAndSeekTimestamp = function(){
     const timestamp = (new URLSearchParams(window.location.search)).get("t");
-    if (timestamp){ // @ts-ignore
-        const [ time, unit ] = timestamp.match(/\d+|\D+/g);
-        const seconds = (unit === "s") ? time : time * 60;
-        window[playerID].seekTo(seconds, true);
-    }
+    if (!timestamp) return;
+
+    // @ts-ignore
+    const [ time, unit ] = timestamp.match(/\d+|\D+/g);
+    const seconds = (unit === "s") ? time : time * 60;
+    window[playerID].seekTo(seconds, true);
 };
 
 /**
