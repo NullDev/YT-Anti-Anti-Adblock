@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.2.0
+// @version        1.2.1
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -232,24 +232,24 @@ const customOverrides = function(){
     // global override for .appendChild
     const { appendChild } = Element.prototype; // @ts-ignore
     Element.prototype.appendChild = function(){
-        if (!this.classList.contains("ytp-endscreen-content")) return;
-        const links = this.querySelectorAll("a");
-        for (const link of links){
-            link.removeAttribute("target");
+        if (this.classList.contains("ytp-endscreen-content")){
+            const links = this.querySelectorAll("a");
+            for (const link of links){
+                link.removeAttribute("target");
 
-            const clone = link.cloneNode(true);
-            link.parentNode?.replaceChild(clone, link);
+                const clone = link.cloneNode(true);
+                link.parentNode?.replaceChild(clone, link);
 
-            clone.addEventListener("click", function(event){
-                event.preventDefault();
-                event.stopPropagation();
+                clone.addEventListener("click", function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
 
-                window.parent.location.href = this.href;
-            });
-
-            log("Removed target attribute from link.");
+                    window.parent.location.href = this.href;
+                });
+            }
         }
 
+        log("Fixed endcart links.");
         appendChild.apply(this, arguments);
     };
 };
