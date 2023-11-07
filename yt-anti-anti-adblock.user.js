@@ -210,6 +210,22 @@ function cleanUp(){
 }
 
 /**
+ * Push our style overrides to the page.
+ */
+const pushStyles = function(){
+    const style = document.createElement("style");
+    style.setAttribute("type", "text/css");
+    style.setAttribute("data-id", "yt-anti-anti-adblock-overrides-" + playerID);
+    style.innerHTML = `
+    .ytp-pause-overlay-container {
+        display: none !important;
+    }
+    `;
+    document.head.appendChild(style);
+    log("Pushed styles.");
+};
+
+/**
  * Callback for the page change observer.
  *
  * @return {void}
@@ -227,6 +243,8 @@ const prober = function(){
 (() => {
     log("Initialized.");
     log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
+
+    pushStyles();
 
     const observer = new MutationObserver(prober);
     observer.observe(document.body, { childList: true, subtree: true });
