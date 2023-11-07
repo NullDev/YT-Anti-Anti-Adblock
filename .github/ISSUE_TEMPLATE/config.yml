@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Install Userscript
+    url: https://github.com/NullDev/YT-Anti-Anti-Adblock/raw/master/yt-anti-anti-adblock.user.js
+    about: Click this link to install the Userscript
