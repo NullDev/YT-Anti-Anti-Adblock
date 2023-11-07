@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.1.4
+// @version        1.2.0
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -226,6 +226,35 @@ const pushStyles = function(){
 };
 
 /**
+ * Override some functions to fix some issues.
+ */
+const customOverrides = function(){
+    // global override for .appendChild
+    const { appendChild } = Element.prototype; // @ts-ignore
+    Element.prototype.appendChild = function(){
+        if (!this.classList.contains("ytp-endscreen-content")) return;
+        const links = this.querySelectorAll("a");
+        for (const link of links){
+            link.removeAttribute("target");
+
+            const clone = link.cloneNode(true);
+            link.parentNode?.replaceChild(clone, link);
+
+            clone.addEventListener("click", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+
+                window.parent.location.href = this.href;
+            });
+
+            log("Removed target attribute from link.");
+        }
+
+        appendChild.apply(this, arguments);
+    };
+};
+
+/**
  * Callback for the page change observer.
  *
  * @return {void}
@@ -245,6 +274,7 @@ const prober = function(){
     log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
 
     pushStyles();
+    customOverrides();
 
     const observer = new MutationObserver(prober);
     observer.observe(document.body, { childList: true, subtree: true });
