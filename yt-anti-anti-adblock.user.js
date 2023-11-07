@@ -6,7 +6,7 @@
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
-// @copyright      Copyright (c) 2023 NullDev
+// @copyright      2023+, NullDev
 // @license        MIT
 // @match          *://*.youtube.com/*
 // @homepageURL    https://github.com/NullDev/YT-Anti-Anti-Adblock
