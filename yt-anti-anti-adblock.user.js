@@ -89,11 +89,23 @@ const loadVideo = function(){
     t.onload = function(){ // @ts-ignore
         const { YT } = window;
 
+        const playerVars = {
+            autoplay: 1,
+            controls: 1,
+            disablekb: 0,
+            enablejsapi: 1,
+        };
+
+        if ((new URLSearchParams(window.location.search)).has("list")){
+            playerVars.listType = "playlist";
+            playerVars.list = (new URLSearchParams(window.location.search)).get("list");
+        }
+
         !!YT && YT.ready(function(){
             log("YouTube API ready.");
             window[playerID] = new YT.Player(playerID, {
                 videoId: (new URLSearchParams(window.location.search).get("v") || ""),
-                playerVars: { autoplay: 1, controls: 1, disablekb: 0, enablejsapi: 1 },
+                playerVars,
                 events: {
                     onReady(){
                         document.body.focus();
