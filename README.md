@@ -95,18 +95,22 @@ Basically, in your Tampermonkey dashboard you create a new script that looks lik
 
 ```js
 // ==UserScript==
-// @name         YouTube Anti-Anti-Adblock
-// @namespace    yt-anti-anti-adblock
-// @version      1.1.0
-// @description  Remove the "ad blockers are not allowed on youtube" popup.
-// @author       NullDev
-// @license      MIT
-// @match        *://*.youtube.com/*
-// @homepageURL  https://github.com/NullDev/YT-Anti-Anti-Adblock
-// @icon         https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
-// @grant        none
-// @run-at       document-idle
-// @require      file://C:/Users/XXX/PATH/TO/REPOSITORY/YT-Anti-Anti-Adblock/yt-anti-anti-adblock.user.js
+// @name           YouTube Anti-Anti-Adblock
+// @name:de        YouTube Anti-Anti-Adblock
+// @namespace      yt-anti-anti-adblock
+// @version        1.2.2
+// @description    Removes all the "ad blockers are not allowed on youtube" popups.
+// @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
+// @author         NullDev
+// @copyright      Copyright (c) 2023 NullDev
+// @license        MIT
+// @match          *://*.youtube.com/*
+// @homepageURL    https://github.com/NullDev/YT-Anti-Anti-Adblock
+// @supportURL     https://github.com/NullDev/YT-Anti-Anti-Adblock/issues/new/choose
+// @icon           https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
+// @grant          none
+// @run-at         document-idle
+// @require        file://C:/Users/XXX/PATH/TO/REPOSITORY/YT-Anti-Anti-Adblock/yt-anti-anti-adblock.user.js
 // ==/UserScript==
 ```
 
