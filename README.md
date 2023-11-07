@@ -114,6 +114,8 @@ Pay attention to the `// @require` line and edit the path accordingly.
 - Windows: `file://C:/.../...` 
 - Linux: `file:///.../...`
 
+**Note:** Make sure you _DO NOT_ provide a `@updateURL` and `@downloadURL` field!
+
 Then make sure the Tampermonkey extension [has permissions for file paths](https://www.tampermonkey.net/faq.php?locale=en#Q204). <br>
 And finally, just code in your IDE and Tampermonkey will autoupdate it. 
 

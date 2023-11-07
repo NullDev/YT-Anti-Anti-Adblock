@@ -2,13 +2,15 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.2.1
+// @version        1.2.2
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
+// @copyright      Copyright (c) 2023 NullDev
 // @license        MIT
 // @match          *://*.youtube.com/*
 // @homepageURL    https://github.com/NullDev/YT-Anti-Anti-Adblock
+// @supportURL     https://github.com/NullDev/YT-Anti-Anti-Adblock/issues/new/choose
 // @icon           https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/icon.png
 // @updateURL      https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
 // @downloadURL    https://raw.githubusercontent.com/NullDev/YT-Anti-Anti-Adblock/master/yt-anti-anti-adblock.user.js
@@ -28,12 +30,21 @@ window.google_ad_status = 1;
 const playerID = Math.random().toString(36).substring(7);
 window[playerID] = null;
 
+// @ts-ignore
+// eslint-disable-next-line camelcase
+const prodMode = !!GM_info.script.updateURL;
+
 /**
  * Log a yt-anti-anti-adblock message and format it.
  *
  * @param {string} msg
  */
-const log = (msg) => console.log(`%cyt-anti-anti-adblock: %c${msg}`, "color:#66A1FF;font-weight:bold;", "color:#63B06B;font-weight:bold;");
+const log = function(msg, forceShow = false){
+    // @ts-ignore
+    // eslint-disable-next-line camelcase
+    if (prodMode && !forceShow) return;
+    console.log(`%cyt-anti-anti-adblock: %c${msg}`, "color:#66A1FF;font-weight:bold;", "color:#63B06B;font-weight:bold;");
+};
 
 /**
  * Probe an array of popup parents (depending on which one youtube decides to show).
@@ -247,9 +258,9 @@ const customOverrides = function(){
                     window.parent.location.href = this.href;
                 });
             }
+            log("Fixed endcart links.");
         }
 
-        log("Fixed endcart links.");
         appendChild.apply(this, arguments);
     };
 };
@@ -270,8 +281,9 @@ const prober = function(){
 };
 
 (() => {
-    log("Initialized.");
-    log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock");
+    log("Initialized.", true);
+    log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock", true);
+    log("Running in " + (prodMode ? "PRODUCTION" : "DEVELOPMENT") + " mode.", true);
 
     pushStyles();
     customOverrides();
