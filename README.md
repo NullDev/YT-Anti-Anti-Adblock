@@ -78,9 +78,6 @@ Feature request or discovered a bug? Please [open an Issue](https://github.com/N
 
 <sub>Made with [contrib.rocks](https://contrib.rocks).</sub>
 
-**Additional credits:** <br>
-The video injection via iframe API is based on [@HPZ07](https://github.com/HPZ07)'s [RemoveAdBlockYoutube](https://github.com/HPZ07/RemoveAdBlockYoutube).
-
 <hr>
 
 ## 💻 Development
