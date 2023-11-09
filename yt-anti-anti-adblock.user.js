@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.3.2
+// @version        1.3.3
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -218,6 +218,18 @@ const handleNavigation = function(){
  */
 const handleKeyCodes = function(event){
     const { key } = event;
+
+    if (
+        document.activeElement?.tagName === "INPUT"
+        || document.activeElement?.tagName === "TEXTAREA"
+        || (
+            document.activeElement?.tagName === "DIV"
+            && (
+                document.activeElement?.getAttribute("contenteditable") === "true"
+                || document.activeElement?.id.includes("contenteditable")
+            )
+        )
+    ) return;
 
     if (key === " "){
         if (!(document.activeElement?.id === "search" || document.activeElement?.id === "contenteditable-root")){
