@@ -73,6 +73,62 @@ const checkAndSeekTimestamp = function(){
     window[playerID].seekTo(seconds, true);
 };
 
+const toggleTheaterMode = function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    const theaterModeButton = document.querySelector("button.ytp-size-button.ytp-button");
+    if (!theaterModeButton) return;
+
+    const theaterMode = theaterModeButton.getAttribute("aria-pressed") === "true";
+
+    const player = document.querySelector("div#player.theater-mode");
+
+    if (theaterMode){
+        player?.classList.remove("theater-mode");
+        theaterModeButton.setAttribute("aria-pressed", "false");
+        theaterModeButton.setAttribute("title", "Theater mode (t)");
+        theaterModeButton.setAttribute("data-title-no-tooltip", "Theater mode");
+    }
+    else {
+        player?.classList.add("theater-mode");
+        theaterModeButton.setAttribute("aria-pressed", "true");
+        theaterModeButton.setAttribute("title", "Exit theater mode (t)");
+        theaterModeButton.setAttribute("data-title-no-tooltip", "Exit theater mode");
+    }
+
+    window.dispatchEvent(new Event("resize"));
+
+    log("Toggled theater mode.");
+};
+
+/**
+ * Add the picture-in-picture and theater mode buttons to the player.
+ */
+const addPlayerControls = function(){
+    const pictureInPictureButton = document.querySelector("button.ytp-pip-button.ytp-button");
+    const theaterModeButton = document.querySelector("button.ytp-size-button.ytp-button");
+
+    pictureInPictureButton?.removeAttribute("style");
+    log("Added picture-in-picture button.");
+
+    if (theaterModeButton){
+        theaterModeButton.outerHTML = `
+        <button class="ytp-size-button ytp-button" aria-keyshortcuts="t" data-priority="7" data-title-no-tooltip="Theater mode" 
+            aria-label="Theater mode keyboard shortcut t" title="Theater mode (t)">
+            <svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%">
+                <use class="ytp-svg-shadow" xlink:href="#ytp-id-58"></use>
+                <path d="m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z" fill="#fff" fill-rule="evenodd" id="ytp-id-58"></path>
+            </svg>
+        </button>
+        `;
+
+        theaterModeButton.addEventListener("click", toggleTheaterMode);
+
+        log("Added theater mode button.");
+    }
+};
+
 /**
  * Add a next button to the player.
  *
@@ -311,7 +367,8 @@ const pushStyles = function(){
     style.setAttribute("type", "text/css");
     style.setAttribute("data-id", "yt-anti-anti-adblock-overrides-" + playerID);
     style.innerHTML = `
-    .ytp-pause-overlay-container {
+    .ytp-pause-overlay-container,
+    a.ytp-youtube-button.ytp-button.yt-uix-sessionlink {
         display: none !important;
     }
     `;
@@ -372,6 +429,7 @@ const prober = function(){
     if (runningInIframe){
         customOverrides();
         addNextButton();
+        addPlayerControls();
         pushStyles();
     }
 
