@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.3.1
+// @version        1.3.2
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -33,6 +33,7 @@ window[playerID] = null;
 // @ts-ignore
 // eslint-disable-next-line camelcase
 const prodMode = !!GM_info.script.updateURL;
+const runningInIframe = (window.location !== window.parent.location);
 
 /**
  * Log a yt-anti-anti-adblock message and format it.
@@ -73,6 +74,50 @@ const checkAndSeekTimestamp = function(){
 };
 
 /**
+ * Add a next button to the player.
+ *
+ * @return {void}
+ */
+const addNextButton = function(attempt = 0){
+    const nextButton = /** @type {HTMLLinkElement} */ (document.querySelector("a.ytp-next-button.ytp-button"));
+    if (!nextButton || nextButton.getAttribute("aria-disabled") === "false") return;
+
+    const nextVideoElementA = window.parent.document.querySelector("ytd-compact-video-renderer a");
+    if (!nextVideoElementA) return;
+
+    const href = nextVideoElementA.getAttribute("href") ?? "";
+    const title = nextVideoElementA.closest("#dismissible")?.querySelector("#video-title")?.getAttribute("title") ?? "";
+    const thumbnail = nextVideoElementA.querySelector("img")?.getAttribute("src") ?? "";
+
+    nextButton.setAttribute("aria-disabled", "false");
+    nextButton.setAttribute("data-preview", thumbnail);
+    nextButton.setAttribute("data-tooltip-text", title);
+    nextButton.setAttribute("href", href);
+    nextButton.setAttribute("title", "Next - " + title);
+    nextButton.setAttribute("data-title-no-tooltip", "Next");
+    nextButton.removeAttribute("style");
+    nextButton.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        window.parent.history.replaceState(null, "", "https://www.youtube.com" + String(href));
+        window.parent.location.reload();
+    });
+
+    setTimeout(() => {
+        if (attempt >= 10){
+            log("Next button not added. Giving up...");
+            return;
+        }
+        else if (nextButton.getAttribute("aria-disabled") === "true"){
+            log("Next button not added. Retrying...");
+            addNextButton(attempt + 1);
+        }
+        else log("Next button added.");
+    }, 500);
+};
+
+/**
  * Load the YouTube API and create a new player.
  *
  * @return {void}
@@ -109,7 +154,6 @@ const loadVideo = function(){
                 events: {
                     onReady(){
                         document.body.focus();
-                        log("Video loaded.");
                         checkAndSeekTimestamp();
                     },
                     onStateChange(event){
@@ -121,8 +165,7 @@ const loadVideo = function(){
 
                             const parentUrl = new URL(window.parent.location.href);
                             if (parentUrl.searchParams.get("v") !== videoId){
-                                window.history.replaceState(null, "", url.toString());
-
+                                window.history.replaceState(null, "", String(url));
                                 // @TODO: This is VERY heavy to reload the ENTIRE page.
                                 //        We should find a way to only reload the parent player and UI.
                                 window.parent.location.reload();
@@ -162,7 +205,7 @@ const handleNavigation = function(){
     const f = document.createElement("div");
     f.setAttribute("id", playerID);
     f.className = "video-stream html5-main-video";
-    this.document.querySelector("div.yt-playability-error-supported-renderers")?.appendChild(f);
+    document.querySelector("div.yt-playability-error-supported-renderers")?.appendChild(f);
 
     // eslint-disable-next-line no-use-before-define
     cleanUp();
@@ -312,9 +355,13 @@ const prober = function(){
     log("Initialized.", true);
     log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock", true);
     log("Running in " + (prodMode ? "PRODUCTION" : "DEVELOPMENT") + " mode.", true);
+    log("Running in " + (runningInIframe ? "IFRAME" : "PARENT") + " window.", true);
 
-    pushStyles();
-    customOverrides();
+    if (runningInIframe){
+        customOverrides();
+        addNextButton();
+        pushStyles();
+    }
 
     const observer = new MutationObserver(prober);
     observer.observe(document.body, { childList: true, subtree: true });
