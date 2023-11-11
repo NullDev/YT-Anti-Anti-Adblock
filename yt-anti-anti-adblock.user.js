@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.3.3
+// @version        1.3.4
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -73,6 +73,12 @@ const checkAndSeekTimestamp = function(){
     window[playerID].seekTo(seconds, true);
 };
 
+/**
+ * Toggle theater mode.
+ *
+ * @param {MouseEvent} e
+ * @return {void}
+ */ // eslint-disable-next-line no-unused-vars
 const toggleTheaterMode = function(e){
     e.preventDefault();
     e.stopPropagation();
@@ -123,7 +129,7 @@ const addPlayerControls = function(){
         </button>
         `;
 
-        theaterModeButton.addEventListener("click", toggleTheaterMode);
+        // theaterModeButton.addEventListener("click", toggleTheaterMode);
 
         log("Added theater mode button.");
     }
@@ -427,6 +433,11 @@ const prober = function(){
     log("Running in " + (runningInIframe ? "IFRAME" : "PARENT") + " window.", true);
 
     if (runningInIframe){
+        if (window.location.href.includes("accounts.youtube.com")){
+            log("Running on wrong iframe. Exiting...");
+            return;
+        }
+
         customOverrides();
         addNextButton();
         addPlayerControls();
