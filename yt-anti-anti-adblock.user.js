@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.4.0
+// @version        1.4.1
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -62,9 +62,11 @@ const parentProber = function(probe, parents){
 
 /**
  * Check if the video URL contains a timestamp and seek to it.
+ *
+ * @param {string|null} [ts=null]
  */
-const checkAndSeekTimestamp = function(){
-    const timestamp = (new URLSearchParams(window.location.search)).get("t");
+const checkAndSeekTimestamp = function(ts = null){
+    const timestamp = ts ?? (new URLSearchParams(window.location.search)).get("t");
     if (!timestamp) return;
 
     // @ts-ignore
@@ -461,6 +463,33 @@ const customOverrides = function(){
 };
 
 /**
+ * Watch for comment timestamp clicks and seek to them.
+ *
+ * @param {Event} event
+ * @return {void}
+ */
+const commentTimeStampWatcher = function(event){
+    const el = /** @type {HTMLLinkElement} */ (event.target);
+    if (el.tagName !== "A" || !el.classList.contains("yt-simple-endpoint")) return;
+
+    event.preventDefault();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+
+    const timestamp = el.getAttribute("href")?.split("&t=")[1];
+    if (!timestamp) return;
+
+    checkAndSeekTimestamp(timestamp);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("t", timestamp);
+    window.history.replaceState(null, "", String(url));
+};
+
+/**
  * Callback for the page change observer.
  *
  * @return {void}
@@ -480,6 +509,11 @@ const prober = function(){
  */
 const initLoad = function(){
     document.querySelector("button.ytp-size-button.ytp-button")?.addEventListener("click", () => toggleTheaterMode());
+
+    document.addEventListener("mousedown", event => {
+        commentTimeStampWatcher(event);
+    });
+
     prober();
 };
 
