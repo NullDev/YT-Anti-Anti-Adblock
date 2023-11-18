@@ -43,7 +43,7 @@ This script has been tested and is compatible with the following extensions and 
 
 Existing solutions either didn't work (e.g. a semi transparent window was still there and scrolling was disabled) or they were overkill (e.g. a complete youtube-only adblocker) or they only killed one type of popup.
 
-Hence: ✨ Youtube Anti-Anti-Adblock ✨
+Hence: ✨ YouTube Anti-Anti-Adblock ✨
 
 <hr>
 
@@ -54,6 +54,8 @@ Hence: ✨ Youtube Anti-Anti-Adblock ✨
    - [Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) or [Greasemonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
    - [Tampermonkey for Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd)
    - [Tampermonkey for Opera/OperaGX](https://addons.opera.com/en-gb/extensions/details/tampermonkey-beta/)
+
+   Note: [ViolentMonkey](https://violentmonkey.github.io/) works too!
 
 2. **Install the script**: <br><br>
 [![Click to install](https://img.shields.io/badge/Click%20to%20install-37a779?style=for-the-badge)](https://github.com/NullDev/YT-Anti-Anti-Adblock/raw/master/yt-anti-anti-adblock.user.js)
@@ -118,7 +120,7 @@ Pay attention to the `// @require` line and edit the path accordingly.
 **Note:** Make sure you _DO NOT_ provide a `@updateURL` and `@downloadURL` field!
 
 Then make sure the Tampermonkey extension [has permissions for file paths](https://www.tampermonkey.net/faq.php?locale=en#Q204). <br>
-And finally, just code in your IDE and Tampermonkey will autoupdate it. 
+And finally, just code in your IDE and Tampermonkey will autoupdate it. (You need to reload YouTube though)
 
 Now all thats left to do is grab an [open issue](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues) and start coding. 😸
 
