@@ -38,7 +38,7 @@ const runningInIframe = (window.location !== window.parent.location);
 /**
  * Log a yt-anti-anti-adblock message and format it.
  *
- * @param {string} msg
+ * @param {any} msg
  */
 const log = function(msg, forceShow = false){
     // @ts-ignore
@@ -72,7 +72,75 @@ const checkAndSeekTimestamp = function(ts = null){
     // @ts-ignore
     const [ time, unit ] = timestamp.match(/\d+|\D+/g);
     const seconds = (unit === "s") ? time : time * 60;
+
     window[playerID].seekTo(seconds, true);
+
+    log("Seeked to timestamp.");
+};
+
+/**
+ * Generate a random Client Playback Nonce
+ *
+ * @return {string}
+ */
+const generateCPN = function(){
+    const CPN_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+    const cpn = Array.from({ length: 16 }, () => CPN_ALPHABET[Math.floor(Math.random() * 256) & 63]).join("");
+    return cpn;
+};
+
+/**
+ * Mark the video as watched.
+ *
+ * @return {void}
+ */
+const markVideoAsWatched = function(){
+    const currentVideoId = (new URLSearchParams(window.location.search)).get("v");
+    if (!currentVideoId) return;
+
+    const scripts = document.querySelectorAll("body script");
+    for (const script of scripts){
+        if (!script.innerHTML.includes("var ytInitialPlayerResponse = {")) continue;
+
+        try {
+            const json = JSON.parse(script.innerHTML.split("var ytInitialPlayerResponse = ")[1].split(";var meta")[0]);
+            // videostatsPlaybackUrl -> baseUrl -> String
+            // videostatsDelayplayUrl -> baseUrl -> String
+            // videostatsWatchtimeUrl -> baseUrl -> String
+            // ptrackingUrl -> baseUrl -> String
+            // qoeUrl -> baseUrl -> String
+            // atrUrl ->
+            //    baseUrl -> String
+            //    elapsedMediaTimeSeconds -> Number
+            // videostatsScheduledFlushWalltimeSeconds -> []
+            // videostatsDefaultFlushIntervalSeconds -> Number
+            const tracking = json.playbackTracking;
+            // @TODO: Also use watchtime to show the videos progress.
+            // see: https://github.com/Airkek/Youtube-Viewers/issues/128
+            const url = new URL(tracking.videostatsPlaybackUrl.baseUrl);
+
+            url.searchParams.set("ver", "2");
+            url.searchParams.set("cpn", generateCPN());
+
+            fetch(url.toString(), {
+                method: "GET",
+                mode: "no-cors",
+                credentials: "omit",
+                headers: {
+                    "User-Agent": navigator.userAgent,
+                },
+            }).then(async response => {
+                log(response.status);
+                log(await response.text());
+            });
+        }
+        catch (e){
+            log("Failed to parse ytInitialPlayerResponse. Exiting...");
+            return;
+        }
+    }
+
+    log("Marked video as watched.");
 };
 
 /**
@@ -263,6 +331,7 @@ const loadVideo = function(){
                     onReady(){
                         document.body.focus();
                         checkAndSeekTimestamp();
+                        markVideoAsWatched();
                     },
                     onStateChange(event){
                         if (event.data === YT.PlayerState.PLAYING && (new URLSearchParams(window.location.search)).has("list")){
@@ -403,7 +472,6 @@ function cleanUp(){
     const type2 = document.querySelector("ytd-enforcement-message-view-model.style-scope");
     if (type2){
         type2.closest("yt-playability-error-supported-renderers")?.replaceWith(f);
-        // type2.replaceWith(f);
 
         const hotkeyManager = document.querySelector("yt-hotkey-manager");
         if (hotkeyManager) hotkeyManager.remove();
