@@ -2,7 +2,7 @@
 // @name           YouTube Anti-Anti-Adblock
 // @name:de        YouTube Anti-Anti-Adblock
 // @namespace      yt-anti-anti-adblock
-// @version        1.3.4
+// @version        1.4.0
 // @description    Removes all the "ad blockers are not allowed on youtube" popups.
 // @description:de Entfernt alle "Werbeblocker sind auf YouTube nicht erlaubt" popups.
 // @author         NullDev
@@ -76,34 +76,80 @@ const checkAndSeekTimestamp = function(){
 /**
  * Toggle theater mode.
  *
- * @param {MouseEvent} e
  * @return {void}
- */ // eslint-disable-next-line no-unused-vars
-const toggleTheaterMode = function(e){
-    e.preventDefault();
-    e.stopPropagation();
+ */
+const toggleTheaterMode = function(){
+    const playerWrap = /** @type {HTMLDivElement} */ (
+        (runningInIframe ? window.parent : window).document.querySelector("ytd-watch-flexy")
+    );
 
-    const theaterModeButton = document.querySelector("button.ytp-size-button.ytp-button");
-    if (!theaterModeButton) return;
+    const isTheater = playerWrap.hasAttribute("theater");
+    if (!isTheater){
+        playerWrap.setAttribute("theater", "");
+        playerWrap.setAttribute("theater-requested_", "");
+        playerWrap.setAttribute("full-bleed-player", "");
+        playerWrap.removeAttribute("default-layout");
 
-    const theaterMode = theaterModeButton.getAttribute("aria-pressed") === "true";
+        playerWrap.style.cssText = `
+            --ytd-watch-flexy-panel-max-height: 460px;
+            --ytd-watch-flexy-chat-max-height: 460px;
+            --ytd-watch-flexy-structured-description-max-height: 460px;
+            --ytd-watch-flexy-comments-panel-max-height: 460px;
+            --ytd-comments-engagement-panel-content-height: 460px;
+        `;
 
-    const player = document.querySelector("div#player.theater-mode");
+        const playerParent = /** @type {HTMLDivElement} */ (
+            (runningInIframe ? window.parent : window).document.querySelector("#columns > #primary > #primary-inner > #player")
+        );
+        playerParent.style.cssText = `
+            display: block !important;
+            width: 100% !important;
+            position: absolute !important;
+            top: 55px !important;
+            left: 0 !important;
+            overflow-x: clip !important;
+        `;
 
-    if (theaterMode){
-        player?.classList.remove("theater-mode");
-        theaterModeButton.setAttribute("aria-pressed", "false");
-        theaterModeButton.setAttribute("title", "Theater mode (t)");
-        theaterModeButton.setAttribute("data-title-no-tooltip", "Theater mode");
+        const theaterModeButton = document.querySelector("button.ytp-size-button.ytp-button");
+        if (theaterModeButton){
+            theaterModeButton.innerHTML = `
+                <svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%">
+                    <use class="ytp-svg-shadow" xlink:href="#ytp-id-122"></use>
+                    <path d="m 26,13 0,10 -16,0 0,-10 z m -14,2 12,0 0,6 -12,0 0,-6 z" fill="#fff" fill-rule="evenodd" id="ytp-id-122"></path>
+                </svg>
+            `;
+        }
     }
+
     else {
-        player?.classList.add("theater-mode");
-        theaterModeButton.setAttribute("aria-pressed", "true");
-        theaterModeButton.setAttribute("title", "Exit theater mode (t)");
-        theaterModeButton.setAttribute("data-title-no-tooltip", "Exit theater mode");
-    }
+        playerWrap.removeAttribute("theater");
+        playerWrap.removeAttribute("theater-requested_");
+        playerWrap.removeAttribute("full-bleed-player");
+        playerWrap.setAttribute("default-layout", "");
 
-    window.dispatchEvent(new Event("resize"));
+        playerWrap.style.cssText = `
+            --ytd-watch-flexy-panel-max-height: 707px;
+            --ytd-watch-flexy-chat-max-height: 707px;
+            --ytd-watch-flexy-structured-description-max-height: 707px;
+            --ytd-watch-flexy-comments-panel-max-height: 707px;
+            --ytd-comments-engagement-panel-content-height: 707px;
+        `;
+
+        const playerParent = /** @type {HTMLDivElement} */ (
+            (runningInIframe ? window.parent : window).document.querySelector("#columns > #primary > #primary-inner > #player")
+        );
+        playerParent.style.cssText = "";
+
+        const theaterModeButton = document.querySelector("button.ytp-size-button.ytp-button");
+        if (theaterModeButton){
+            theaterModeButton.innerHTML = `
+                <svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%">
+                    <use class="ytp-svg-shadow" xlink:href="#ytp-id-58"></use>
+                    <path d="m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z" fill="#fff" fill-rule="evenodd" id="ytp-id-58"></path>
+                </svg>
+            `;
+        }
+    }
 
     log("Toggled theater mode.");
 };
@@ -128,8 +174,6 @@ const addPlayerControls = function(){
             </svg>
         </button>
         `;
-
-        // theaterModeButton.addEventListener("click", toggleTheaterMode);
 
         log("Added theater mode button.");
     }
@@ -284,6 +328,8 @@ const handleKeyCodes = function(event){
     if (
         document.activeElement?.tagName === "INPUT"
         || document.activeElement?.tagName === "TEXTAREA"
+        || document.activeElement?.id === "search"
+        || document.activeElement?.id === "contenteditable-root"
         || (
             document.activeElement?.tagName === "DIV"
             && (
@@ -294,13 +340,11 @@ const handleKeyCodes = function(event){
     ) return;
 
     if (key === " "){
-        if (!(document.activeElement?.id === "search" || document.activeElement?.id === "contenteditable-root")){
-            (window[playerID].getPlayerState() === 1)
-                ? window[playerID].pauseVideo()
-                : window[playerID].playVideo();
+        (window[playerID].getPlayerState() === 1)
+            ? window[playerID].pauseVideo()
+            : window[playerID].playVideo();
 
-            event.preventDefault();
-        }
+        event.preventDefault();
     }
 
     else if (key === "ArrowLeft" || key === "ArrowRight"){
@@ -312,6 +356,10 @@ const handleKeyCodes = function(event){
         ((document.fullscreenElement || document.webkitFullscreenElement) !== null)
             ? document.exitFullscreen()
             : window[playerID].getIframe().requestFullscreen();
+    }
+
+    else if (key === "t"){
+        toggleTheaterMode();
     }
 };
 
@@ -352,7 +400,8 @@ function cleanUp(){
 
     const type2 = document.querySelector("ytd-enforcement-message-view-model.style-scope");
     if (type2){
-        type2.replaceWith(f);
+        type2.closest("yt-playability-error-supported-renderers")?.replaceWith(f);
+        // type2.replaceWith(f);
 
         const hotkeyManager = document.querySelector("yt-hotkey-manager");
         if (hotkeyManager) hotkeyManager.remove();
@@ -426,6 +475,14 @@ const prober = function(){
     if (prevPlayer) prevPlayer.remove();
 };
 
+/**
+ * Push everything that needs to be loaded quickly.
+ */
+const initLoad = function(){
+    document.querySelector("button.ytp-size-button.ytp-button")?.addEventListener("click", () => toggleTheaterMode());
+    prober();
+};
+
 (() => {
     log("Initialized.", true);
     log("By NullDev - https://nulldev.org - Code: https://github.com/NullDev/YT-Anti-Anti-Adblock", true);
@@ -433,6 +490,8 @@ const prober = function(){
     log("Running in " + (runningInIframe ? "IFRAME" : "PARENT") + " window.", true);
 
     if (runningInIframe){
+        // afaik this is the only other iframe youtube natively uses.
+        // we don't have to check other domains.
         if (window.location.href.includes("accounts.youtube.com")){
             log("Running on wrong iframe. Exiting...");
             return;
@@ -459,5 +518,5 @@ const prober = function(){
         handleNavigation();
     };
 
-    window.addEventListener("load", prober);
+    window.addEventListener("load", initLoad);
 })();
