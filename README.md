@@ -35,6 +35,7 @@ This script has been tested and is compatible with the following extensions and 
 - [Return YouTube Dislike](https://chrome.google.com/webstore/detail/return-youtube-dislike/gebbhagfogifgggkldgodflihgfeippi)
 - [Sponsor block for YouTube](https://chrome.google.com/webstore/detail/sponsorblock-for-youtube/mnjggcdmjocbbbhaepdhchncahnbgone)
 - [YouTube Playlist Search](https://inspect.video/playlist-search)
+- [Enhancer for YT](https://chromewebstore.google.com/detail/enhancer-for-youtube/ponfpcnoihfmfllpaingbgckeeldkhle)
 - ... others will most likely work as well, but have not been tested. Please [report any issue](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues/new/choose) you encounter.
 
 <hr>
