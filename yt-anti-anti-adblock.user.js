@@ -27,8 +27,15 @@
 // @ts-ignore
 window.google_ad_status = 1;
 
-const playerID = Math.random().toString(36).substring(7);
+const playerID = Math.random().toString(36).substring(7); // @ts-ignore
 window[playerID] = null;
+
+// @ts-ignore
+window.trustedTypes.createPolicy("default", {
+    createHTML: (/** @type {string} */ str) => str,
+    createScriptURL: (/** @type {string} */ str) => str,
+    createScript: (/** @type {string} */ str) => str,
+});
 
 // @ts-ignore
 // eslint-disable-next-line camelcase
@@ -72,7 +79,7 @@ const checkAndSeekTimestamp = function(ts = null){
     // @ts-ignore
     const [ time, unit ] = timestamp.match(/\d+|\D+/g);
     const seconds = (unit === "s") ? time : time * 60;
-
+    // @ts-ignore
     window[playerID].seekTo(seconds, true);
 
     log("Seeked to timestamp.");
@@ -244,6 +251,39 @@ const addPlayerControls = function(){
 
         log("Added theater mode button.");
     }
+
+    const settingsMenu = document.querySelector("div.ytp-popup.ytp-settings-menu > .ytp-panel > .ytp-panel-menu");
+    const btnHtml = `
+        <div class="ytp-menuitem-icon">
+            <svg height="24" viewBox="0 0 24 24" width="24">
+                <path d="M21 7v10H3V7h18m1-1H2v12h20V6zM11.5 2v3h1V2h-1zm1 17h-1v3h1v-3zM3.79 3 6 5.21l.71-.71L4.5 2.29 3.79 3zm2.92 16.5L6 18.79 3.79 21l.71.71 2.21-2.21zM19.5 2.29 17.29 4.5l.71.71L20.21 3l-.71-.71zm0 19.42.71-.71L18 18.79l-.71.71 2.21 2.21z" fill="white">
+                </path>
+            </svg>
+        </div>
+        <div class="ytp-menuitem-label">Ambient mode</div>
+        <div class="ytp-menuitem-content">
+            <div class="ytp-menuitem-toggle-checkbox"></div>
+        </div>
+    `;
+
+    const btn = document.createElement("div");
+    btn.className = "ytp-menuitem";
+    btn.setAttribute("role", "menuitemcheckbox");
+    btn.setAttribute("aria-checked", "true");
+    btn.setAttribute("tabindex", "0");
+    btn.innerHTML = btnHtml;
+
+    btn.addEventListener("click", () => {
+        const checked = btn.getAttribute("aria-checked") === "true";
+        btn.setAttribute("aria-checked", String(!checked));
+
+        const c = window.parent.document.getElementById("cinematics-container");
+        if (c) c.style.display = checked ? "none" : "block";
+    });
+
+    settingsMenu?.insertBefore(btn, settingsMenu.firstChild);
+
+    log("Added ambient mode button.");
 };
 
 /**
@@ -291,6 +331,14 @@ const addNextButton = function(attempt = 0){
 };
 
 /**
+ * Enable ambient mode.
+ *
+ * @return {void}
+ */
+const enableAmbientMode = function(){
+};
+
+/**
  * Load the YouTube API and create a new player.
  *
  * @return {void}
@@ -312,15 +360,17 @@ const loadVideo = function(){
             controls: 1,
             disablekb: 0,
             enablejsapi: 1,
+            listType: "",
+            list: "",
         };
 
         if ((new URLSearchParams(window.location.search)).has("list")){
             playerVars.listType = "playlist";
-            playerVars.list = (new URLSearchParams(window.location.search)).get("list");
+            playerVars.list = (new URLSearchParams(window.location.search)).get("list") || "";
         }
 
         !!YT && YT.ready(function(){
-            log("YouTube API ready.");
+            log("YouTube API ready."); // @ts-ignore
             window[playerID] = new YT.Player(playerID, {
                 videoId: (new URLSearchParams(window.location.search).get("v") || ""),
                 playerVars,
@@ -329,7 +379,11 @@ const loadVideo = function(){
                         document.body.focus();
                         checkAndSeekTimestamp();
                         markVideoAsWatched();
+                        enableAmbientMode();
                     },
+                    /**
+                     * @param {{ data: any; target: { getVideoData: () => { (): any; new (): any; video_id: any; }; }; }} event
+                     */
                     onStateChange(event){
                         if (event.data === YT.PlayerState.PLAYING && (new URLSearchParams(window.location.search)).has("list")){
                             const videoId = event.target.getVideoData().video_id;
@@ -407,22 +461,20 @@ const handleKeyCodes = function(event){
         )
     ) return;
 
-    if (key === " "){
-        (window[playerID].getPlayerState() === 1)
-            ? window[playerID].pauseVideo()
-            : window[playerID].playVideo();
+    if (key === " "){ // @ts-ignore
+        (window[playerID].getPlayerState() === 1) ? window[playerID].pauseVideo() : window[playerID].playVideo();
 
         event.preventDefault();
     }
 
-    else if (key === "ArrowLeft" || key === "ArrowRight"){
-        const currentTime = window[playerID].getCurrentTime();
+    else if (key === "ArrowLeft" || key === "ArrowRight"){ // @ts-ignore
+        const currentTime = window[playerID].getCurrentTime(); // @ts-ignore
         window[playerID].seekTo(currentTime + (key === "ArrowLeft" ? -5 : 5), true);
     }
 
     else if (key === "f"){ // @ts-ignore
         ((document.fullscreenElement || document.webkitFullscreenElement) !== null)
-            ? document.exitFullscreen()
+            ? document.exitFullscreen() // @ts-ignore
             : window[playerID].getIframe().requestFullscreen();
     }
 
@@ -516,13 +568,13 @@ const customOverrides = function(){
                 clone.addEventListener("click", function(event){
                     event.preventDefault();
                     event.stopPropagation();
-
+                    // @ts-ignore
                     window.parent.location.href = this.href;
                 });
             }
             log("Fixed endcart links.");
         }
-
+        // @ts-ignore
         appendChild.apply(this, arguments);
     };
 };
@@ -579,6 +631,11 @@ const initLoad = function(){
         commentTimeStampWatcher(event);
     });
 
+    if (!runningInIframe){
+        const ytd = document.querySelector("ytd-player");
+        ytd?.parentElement && ytd.parentElement.removeChild(ytd);
+    }
+
     prober();
 };
 
@@ -607,12 +664,12 @@ const initLoad = function(){
 
     const {pushState} = history;
     const {replaceState} = history;
-    history.pushState = function(){
+    history.pushState = function(){ // @ts-ignore
         pushState.apply(history, arguments);
         handleNavigation();
     };
 
-    history.replaceState = function(){
+    history.replaceState = function(){ // @ts-ignore
         replaceState.apply(history, arguments);
         handleNavigation();
     };
