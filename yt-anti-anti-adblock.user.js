@@ -25,7 +25,8 @@
 // ========================= //
 
 // @ts-ignore
-window.google_ad_status = 1;
+// window.google_ad_status = 1;
+// ^ could be they detect this now...
 
 const playerID = Math.random().toString(36).substring(7); // @ts-ignore
 window[playerID] = null;
@@ -362,6 +363,7 @@ const loadVideo = function(){
             enablejsapi: 1,
             listType: "",
             list: "",
+            origin: location.origin,
         };
 
         if ((new URLSearchParams(window.location.search)).has("list")){
@@ -374,12 +376,28 @@ const loadVideo = function(){
             window[playerID] = new YT.Player(playerID, {
                 videoId: (new URLSearchParams(window.location.search).get("v") || ""),
                 playerVars,
+                host: "https://www.youtube-nocookie.com",
                 events: {
                     onReady(){
                         document.body.focus();
                         checkAndSeekTimestamp();
                         markVideoAsWatched();
                         enableAmbientMode();
+                    },
+                    /**
+                     * @param {{ data: any; }} evt
+                     */
+                    onError(evt){
+                        // 2 (invalid param), 5 (HTML5 error), 100/101/150 (blocked)
+                        try { // @ts-ignore
+                            const p = window[playerID];
+                            const iframe = p && p.getIframe ? p.getIframe() : null;
+                            const src = iframe ? iframe.src : "(no iframe yet)";
+                            log(`Player onError: code=${evt?.data} iframe=${src}`, true);
+                        }
+                        catch(e){
+                            log(`Player onError (logging failed): ${e}`, true);
+                        }
                     },
                     /**
                      * @param {{ data: any; target: { getVideoData: () => { (): any; new (): any; video_id: any; }; }; }} event
@@ -520,10 +538,19 @@ function cleanUp(){
 
     const type2 = document.querySelector("ytd-enforcement-message-view-model.style-scope");
     if (type2){
-        type2.closest("yt-playability-error-supported-renderers")?.replaceWith(f);
+        // Remove the enforcement card but keep the player host in place
+        const host = document.querySelector("#columns #primary #primary-inner #player");
+        if (host){
+            host.innerHTML = "";
+            host.appendChild(f);
+        }
+        else {
+            // Fallback
+            type2.closest("yt-playability-error-supported-renderers")?.replaceWith(f);
+        }
 
-        const hotkeyManager = document.querySelector("yt-hotkey-manager");
-        if (hotkeyManager) hotkeyManager.remove();
+        // const hotkeyManager = document.querySelector("yt-hotkey-manager");
+        // if (hotkeyManager) hotkeyManager.remove();
 
         log("Cleaned up violation message");
 
@@ -632,8 +659,8 @@ const initLoad = function(){
     });
 
     if (!runningInIframe){
-        const ytd = document.querySelector("ytd-player");
-        ytd?.parentElement && ytd.parentElement.removeChild(ytd);
+        const ytd = document.querySelector("ytd-player"); // @ts-ignore
+        if (ytd) ytd.style.display = "none";
     }
 
     prober();
