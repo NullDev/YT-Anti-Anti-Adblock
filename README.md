@@ -11,6 +11,17 @@
 <p align="center"><b>Simplistic user-script to remove YouTube's "Adblockers are not allowed" popup.</b></p>
 <hr>
 
+# :warning: IMPORTANT
+
+This script DOES work for me as of September 2025. <br>
+**HOWEVER**, there are currently a lot of [unresolved issues](https://github.com/NullDev/YT-Anti-Anti-Adblock/issues) and I cannot reproduce them. <br>
+
+**I WOULD GREATLY APPRECIATE HELP AND COLLABORATIORS ON THIS PROJECT!**
+
+<small>Context: For me, the script uses the iFrame method only, which works fine for me.</small>
+
+<hr>
+
 ## :question: What does it do?
 
 It automatically closes the anti-adblock popups and un-pauses (or loads) the video for you. <br>
