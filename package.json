@@ -15,8 +15,8 @@
   },
   "homepage": "https://github.com/NullDev/YT-Anti-Anti-Adblock#readme",
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/eslint-parser": "^7.28.6",
+    "@babel/core": "^8.0.1",
+    "@babel/eslint-parser": "^8.0.1",
     "eslint": "^9.39.2"
   }
 }
